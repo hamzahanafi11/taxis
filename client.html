@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bootstrap Table</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <style>
+        #logout-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <button id="logout-btn" class="btn btn-primary">Logout</button>
+
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to our Taxi Booking Platform!</h1>
+        <hr class="my-4">
+        <p class="lead">We are committed to providing you with the best service for booking taxis in your city. Our platform is designed to provide a seamless experience for both clients and admins, with user-friendly features and an intuitive interface.</p>
+        <p>With our platform, you can easily book and manage your taxi reservations, while our admin tools allow you to efficiently manage your fleet of taxis. Whether you're a client looking for a reliable taxi service or an admin looking to streamline your operations, we've got you covered.</p>
+        <a class="btn btn-success btn-lg" target="_blank" href="https://www.linkedin.com/school/universit%C3%A9-euro-m%C3%A9diterran%C3%A9enne-de-f%C3%A8s/" role="button">Contact us</a>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Taxis Information</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Taxi Number</th>
+                            <th>Driver Name</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add data rows here using JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data array
+        var taxis = [];
+
+        // Check if data is stored in localStorage
+        if (localStorage.getItem("taxis")) {
+            taxis = JSON.parse(localStorage.getItem("taxis"));
+        }
+
+        // Display data in table
+        function displayTaxis() {
+            var tableBody = "";
+            for (var i = 0; i < taxis.length; i++) {
+                tableBody += "<tr>";
+                tableBody += "<td>" + taxis[i].taxiNumber + "</td>";
+                tableBody += "<td>" + taxis[i].driverName + "</td>";
+                tableBody += "<td>" + taxis[i].availability + "</td>";
+                if (taxis[i].availability === "Available") {
+                   tableBody += "<td><button type='button' class='btn btn-primary' onclick='reserveTaxi(" + i + ")'>Reserve</button></td>";
+                } else {
+                    tableBody += "<td><button type='button' class='btn btn-warning' onclick='reserveTaxi(" + i + ")'>Cancel Reservation</button></td>";
+                }
+                tableBody += "</tr>";
+            }
+            $("tbody").html(tableBody);
+        }
+
+        // Reserve taxi
+        function reserveTaxi(index) {
+            if (taxis[index].availability === "Available") {
+                taxis[index].availability = "Not Available";
+                $("tbody tr:eq("+index+") td:eq(2)").text(taxis[index].availability);
+                $("tbody tr:eq("+index+") td:eq(3)").html("<button type='button' class='btn btn-warning' onclick='reserveTaxi(" + index + ")'>Cancel Reservation</button>");
+            } else {
+                taxis[index].availability = "Available";
+                $("tbody tr:eq("+index+") td:eq(2)").text(taxis[index].availability);
+                $("tbody tr:eq("+index+") td:eq(3)").html("<button type='button' class='btn btn-primary' onclick='reserveTaxi(" + index + ")'>Reserve</button>");
+            }
+            localStorage.setItem("taxis", JSON.stringify(taxis));
+        }
+        
+
+        // Initialize page
+        displayTaxis();
+
+        const logoutButton = document.getElementById('logout-btn');
+        logoutButton.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+    </script>
+
+</body>
