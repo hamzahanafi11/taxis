@@ -38,7 +38,13 @@
                     <thead>
                         <tr>
                             <th>Taxi Number</th>
-                            <th>Driver Name</th>
+                            <th>Student - Car owner</th>
+                            <th>Plate Registration</th>
+                            <th>Trip</th>
+                            <th>Number of passengers</th>
+                            <th>Car color</th>
+                            <th>Localisation</th>
+                            <th>Price</th>
                             <th>Availability</th>
                             <th>Actions</th>
                         </tr>
@@ -67,6 +73,12 @@
                 tableBody += "<tr>";
                 tableBody += "<td>" + taxis[i].taxiNumber + "</td>";
                 tableBody += "<td>" + taxis[i].driverName + "</td>";
+                tableBody += "<td>" + generateRandomNumber(5) + " " + generateRandomCharacters(1) + " " + generateRandomNumber(2) + "</td>";
+                tableBody += "<td>" + getRandomTrip() + "</td>";
+                tableBody += "<td>" + generateRandomNumber(1) + "</td>";
+                tableBody += "<td>" + getRandomColor() + "</td>";
+                tableBody += "<td>" + getRandomLocalisation() + "</td>";
+                tableBody += "<td>" + generateRandomNumber(2) + "DH" + "</td>";
                 tableBody += "<td>" + taxis[i].availability + "</td>";
                 if (taxis[i].availability === "Available") {
                    tableBody += "<td><button type='button' class='btn btn-primary' onclick='reserveTaxi(" + i + ")'>Reserve</button></td>";
@@ -82,12 +94,12 @@
         function reserveTaxi(index) {
             if (taxis[index].availability === "Available") {
                 taxis[index].availability = "Not Available";
-                $("tbody tr:eq("+index+") td:eq(2)").text(taxis[index].availability);
-                $("tbody tr:eq("+index+") td:eq(3)").html("<button type='button' class='btn btn-warning' onclick='reserveTaxi(" + index + ")'>Cancel Reservation</button>");
+                $("tbody tr:eq("+index+") td:eq(8)").text(taxis[index].availability);
+                $("tbody tr:eq("+index+") td:eq(9)").html("<button type='button' class='btn btn-warning' onclick='reserveTaxi(" + index + ")'>Cancel Reservation</button>");
             } else {
                 taxis[index].availability = "Available";
-                $("tbody tr:eq("+index+") td:eq(2)").text(taxis[index].availability);
-                $("tbody tr:eq("+index+") td:eq(3)").html("<button type='button' class='btn btn-primary' onclick='reserveTaxi(" + index + ")'>Reserve</button>");
+                $("tbody tr:eq("+index+") td:eq(8)").text(taxis[index].availability);
+                $("tbody tr:eq("+index+") td:eq(9)").html("<button type='button' class='btn btn-primary' onclick='reserveTaxi(" + index + ")'>Reserve</button>");
             }
             localStorage.setItem("taxis", JSON.stringify(taxis));
         }
@@ -100,6 +112,55 @@
         logoutButton.addEventListener('click', function() {
             window.location.href = 'index.html';
         });
+
+        function generateRandomCharacters(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const charactersLength = characters.length;
+            
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            
+            return result;
+        }
+
+        function generateRandomNumber(length) {
+            let result = '';
+            const characters = '123456789';
+            const charactersLength = characters.length;
+            
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            
+            return result;
+        }
+
+        function getRandomTrip() {
+            array = ['UEMF to Medina', 'UEMF to Borj Nord', 'Borj Nord to UEMF',
+            'UEMF to Jnan Sbil Gardens', 'UEMF to Moulay Idriss Zerhoun',
+            'Medina to UEMF', 'Moulay Idriss Zerhoun to UEMF', 'Jnan Sbil Gardens to UEMF']
+            
+            const randomIndex = Math.floor(Math.random() * array.length);
+            return array[randomIndex];
+        }
+
+        function getRandomColor() {
+            array = ['blue', 'red', 'yellow', 'green']
+            
+            const randomIndex = Math.floor(Math.random() * array.length);
+            return array[randomIndex];
+        }
+
+        function getRandomLocalisation() {
+            array = ['Medina', 'UEMF', 'Borj Nord','Jnan Sbil Gardens', 'Moulay Idriss Zerhoun']
+            
+            const randomIndex = Math.floor(Math.random() * array.length);
+            return array[randomIndex];
+        }
+
+
 
     </script>
 
